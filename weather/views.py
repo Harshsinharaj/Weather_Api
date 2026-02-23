@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render
+from django.conf import settings
 
-API_KEY = "85897e25d3ada08f45f565b36dba0a4e"
 
 def weather_view(request):
     weather_data = None
@@ -10,13 +10,17 @@ def weather_view(request):
         city = request.POST.get("city")
 
         if city:
-            # 💠 Current Weather API (works with your key)
+            API_KEY = settings.WEATHER_API_KEY  # 🔥 Get from Render env variable
+
+            # 🌤 Current Weather
             cur_url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
             cur_res = requests.get(cur_url)
             cur_data = cur_res.json()
 
             if cur_res.status_code != 200:
-                weather_data = {"error": cur_data.get("message", "City not found")}
+                weather_data = {
+                    "error": cur_data.get("message", "City not found")
+                }
                 return render(request, "weather.html", {"weather": weather_data})
 
             # Extract current data
@@ -30,7 +34,7 @@ def weather_view(request):
                 "wind": cur_data["wind"]["speed"],
             }
 
-            # 📍 Forecast API (5-day / 3-hour forecast)
+            # 📅 5-day Forecast
             forecast_url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
             f_res = requests.get(forecast_url)
             f_data = f_res.json()
