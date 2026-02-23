@@ -1,0 +1,53 @@
+{% load static %}   <!-- 🔹 Required for static files -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div class="weather-app">
+    <h2>Weather App</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city name">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if weather %}
+        {% if weather.error %}
+            <p style="color:red;">{{ weather.error }}</p>
+        {% else %}
+            <h3>{{ weather.city }}</h3>
+            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png">
+
+            <p>Temperature: {{ weather.temp }} °C</p>
+            <p>Feels Like: {{ weather.feels_like }} °C</p>
+            <p>Description: {{ weather.description }}</p>
+            <p>Humidity: {{ weather.humidity }}%</p>
+            <p>Wind Speed: {{ weather.wind }} m/s</p>
+
+            <!-- 💡 Forecast -->
+            {% if weather.forecast %}
+                <h4>5-Day Forecast (Every 3 Hours)</h4>
+                <div id="forecast">
+                    {% for f in weather.forecast %}
+                      <div class="forecast-card">
+                        <strong>{{ f.dt_txt }}</strong><br>
+                        <img src="https://openweathermap.org/img/wn/{{ f.weather.0.icon }}.png"><br>
+                        {{ f.main.temp }}°C &mdash; {{ f.weather.0.description }}
+                      </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+</div>
+
+</body>
+</html>

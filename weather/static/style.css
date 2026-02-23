@@ -1,0 +1,32 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #72c2f8;
+    margin: 0;
+    padding: 20px;
+}
+
+.weather-app {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+}
+
+#forecast {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.forecast-card {
+    background: #e0f7fa;
+    padding: 10px;
+    margin: 6px;
+    border-radius: 8px;
+    width: 110px;
+    font-size: 13px;
+}
